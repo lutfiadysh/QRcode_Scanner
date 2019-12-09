@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "212633178042",
+    "firebase_url": "https://qr-scanner-ee644.firebaseio.com",
+    "project_id": "qr-scanner-ee644",
+    "storage_bucket": "qr-scanner-ee644.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:212633178042:android:1bd7c86a5571a756779783",
+        "android_client_info": {
+          "package_name": "com.ladysh.qr_scan"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "212633178042-msdv71q37qnb4om8al8ppbsjkodngm4v.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDvoYEH0cNwiyczFTCZYZ0f35ixZKtrcH0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "212633178042-msdv71q37qnb4om8al8ppbsjkodngm4v.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
