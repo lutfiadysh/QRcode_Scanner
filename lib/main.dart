@@ -3,6 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:barcode_scan/barcode_scan.dart';
 import 'package:flutter/services.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:firebase_database/ui/firebase_animated_list.dart';
+import 'package:firebase_core/firebase_core.dart';
+
+final FirebaseApp app = FirebaseApp();
 
 void main() => runApp(new MaterialApp(
   theme: ThemeData(
@@ -21,7 +25,48 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  FirebaseDatabase database = new FirebaseDatabase();
+  final scaffoldKey = new GlobalKey<ScaffoldState>();
+  List<Item> items = List();
+  Item item;
+  DatabaseReference itemRef;
+
+  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
+
+  @override
+  void initState()
+  {
+    super.initState();
+    item = Item("");
+    final FirebaseDatabase database = FirebaseDatabase.instance;
+    itemRef = database.reference().child('data');
+    itemRef.onChildAdded.listen(_onEntryAdded);
+    itemRef.onChildChanged.listen(_onEntryChanged);
+  }
+
+  _onEntryAdded(Event event) {
+    setState(() {
+      items.add(Item.fromSnapshot(event.snapshot));
+    });
+  }
+
+  _onEntryChanged(Event event) {
+    var old = items.singleWhere((entry) {
+      return entry.key == event.snapshot.key;
+    });
+    setState(() {
+      items[items.indexOf(old)] = Item.fromSnapshot(event.snapshot);
+    });
+  }
+
+  void handleSubmit() {
+    final FormState form = formKey.currentState;
+
+    if (form.validate()) {
+      form.save();
+      form.reset();
+      itemRef.push().set(item.toJson());
+    }
+  }
 
   String result = "Selamat Datang !";
   Future _scanQR() async {
@@ -33,7 +78,7 @@ class _HomeScreenState extends State<HomeScreen> {
     }on PlatformException catch(ex){
       if(ex.code == BarcodeScanner.CameraAccessDenied){
          setState(() {
-           result = "Permission was denied!";
+           result = "Izinkan menggukan Camera!";
          });
       }else{
         setState(() {
@@ -51,9 +96,7 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
-  @override
   Widget build(BuildContext context) {
-    final scaffoldKey = new GlobalKey<ScaffoldState>();
     return Scaffold(
       key:scaffoldKey,
       appBar: AppBar(
@@ -69,6 +112,8 @@ class _HomeScreenState extends State<HomeScreen> {
               Container(
                 padding: EdgeInsets.fromLTRB(200.0, 20.0, 200.0, 20.0),
                 width: 5,
+                child:Form(
+                  key: formKey,
                 child: Column(
                   children: <Widget>[
                     new GestureDetector(
@@ -85,26 +130,24 @@ class _HomeScreenState extends State<HomeScreen> {
                       height: 20,
                     ),
                     new TextFormField(
+                      initialValue: "",
+                      onSaved: (val) => item.title = val,
+                      validator: (val) => val == "" ? val : null,
                       decoration: InputDecoration(
                           labelText: 'Paste disini'
                       ),
                     ),
                   ]),
+                ),
               ),
               SizedBox(height: 200),
               Padding(
                 padding: EdgeInsets.symmetric(vertical: 8.0, horizontal: 60.0),
-                child: MaterialButton(
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(5)
-                    ),
-                    height: 50,
-                    color: Colors.green,
-                    minWidth: 20,
-                    textColor: Colors.white,
-                    splashColor: Colors.blueGrey,
-                    onPressed: (){},
-                    child: const Text('Simpan')
+                child: IconButton(
+                    onPressed: (){
+                      handleSubmit();
+                    },
+                  icon: Icon(Icons.send),
                 ),
               ),
               SizedBox(
@@ -132,5 +175,22 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
       ),
     );
+  }
+}
+class Item {
+  String key;
+  String title;
+  String body;
+
+  Item(this.title);
+
+  Item.fromSnapshot(DataSnapshot snapshot)
+      : key = snapshot.key,
+        title = snapshot.value["title"];
+
+  toJson() {
+    return {
+      "title": title,
+    };
   }
 }
