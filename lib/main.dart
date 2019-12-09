@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:barcode_scan/barcode_scan.dart';
 import 'package:flutter/services.dart';
 import 'package:firebase_database/firebase_database.dart';
-import 'package:firebase_database/ui/firebase_animated_list.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'data.dart';
 
 final FirebaseApp app = FirebaseApp();
 
@@ -141,14 +141,30 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ),
               SizedBox(height: 200),
-              Padding(
-                padding: EdgeInsets.symmetric(vertical: 8.0, horizontal: 60.0),
-                child: IconButton(
+              Center(
+              child : Column(
+                children: <Widget>[
+                  IconButton(
                     onPressed: (){
                       handleSubmit();
                     },
-                  icon: Icon(Icons.send),
-                ),
+                    icon: Icon(Icons.send),
+                  ),
+                  MaterialButton(
+                    child: Text("Lihat Data!"),
+                    onPressed: (){
+                      Navigator.push(
+                          context,
+                      MaterialPageRoute(builder: (context) => DataHasil()));
+                    },
+                    height: 50,
+                    color: Colors.greenAccent,
+                    minWidth: 20,
+                    textColor: Colors.white,
+                    splashColor: Colors.green,
+                  ),
+                ],
+              ),
               ),
               SizedBox(
                 height: 5,
