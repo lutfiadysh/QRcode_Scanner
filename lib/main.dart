@@ -6,6 +6,7 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:splashscreen/splashscreen.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
+import 'package:gradient_widgets/gradient_widgets.dart';
 
 final FirebaseApp app = FirebaseApp();
 
@@ -50,7 +51,7 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState()
   {
     super.initState();
-    item = Item("","");
+    item = Item("","","","");
     final FirebaseDatabase database = FirebaseDatabase.instance;
     itemRef = database.reference().child('data/shun');
     itemRef.onChildAdded.listen(_onEntryAdded);
@@ -90,7 +91,7 @@ class _HomeScreenState extends State<HomeScreen> {
               style: TextStyle(color: Colors.white, fontSize: 20),
             ),
             onPressed: () => Navigator.pop(context),
-            color: Color.fromRGBO(0, 179, 134, 1.0),
+            color: Colors.lightBlueAccent,
             radius: BorderRadius.circular(0.0),
           ),
         ],
@@ -132,7 +133,7 @@ class _HomeScreenState extends State<HomeScreen> {
       key:scaffoldKey,
       appBar: AppBar(
         centerTitle: true,
-        title: Text('SHUN QRCode Scanner',style: TextStyle(fontFamily: 'dark'),),
+        title: Text('SHUN QRCode Scanner', style: TextStyle(fontFamily: 'dark'),),
         actions: <Widget>[
           IconButton(
             icon:Icon(Icons.info_outline),
@@ -145,80 +146,181 @@ class _HomeScreenState extends State<HomeScreen> {
       body: ListView(
         padding: EdgeInsets.fromLTRB(20.0, 40.0, 20.0, 20.0),
               children: <Widget>[
-                Center(
-                  child:Form(
-                    key: formKey,
-                    child: Column(
-                        children: <Widget>[
-                          new GestureDetector(
-                            child:Text(result,
-                              style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),
-                            ),
-                            onLongPress: () {
-                              Clipboard.setData(new ClipboardData(text: result));
-                              scaffoldKey.currentState.showSnackBar(
-                                  new SnackBar(content: new Text("Berhasil di Copy!")));
-                            },
-                          ),
-                          SizedBox(
-                            height: 40.0,
-                          ),
-                          new TextFormField(
-                            initialValue: "",
-                            onSaved: (val) => item.title = val,
-                            validator: (val) => val == "" ? val : null,
-                            decoration: InputDecoration(
-                                labelText: 'Paste disini'
-                            ),
-                          ),
-                          SizedBox(
-                            height: 20.0,
-                          ),
-                          new TextFormField(
-                            initialValue: "",
-                            onSaved: (val) => item.name = val,
-                            validator: (val) => val == "" ? val : null,
-                            decoration: InputDecoration(
-                                labelText: 'NIS Anda'
-                            ),
-                          ),
-                          SizedBox(
-                            height: 50.0,
-                          ),
-                        ]),
-                  ),
-                ),
-                Center(
-                  child : Column(
-                    children: <Widget>[
-                      IconButton(
-                        onPressed: (){
-                          handleSubmit();
-                        },
-                        icon: Icon(Icons.send),
+                new Stack(
+                  children: <Widget>[
+                    SizedBox(
+                      height: 50.0,
+                    ),
+                    new GestureDetector(
+                      child:Text(result,
+                        style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),
                       ),
-                    ],
-                  ),
+                      onLongPress: () {
+                        Clipboard.setData(new ClipboardData(text: result));
+                        scaffoldKey.currentState.showSnackBar(
+                            new SnackBar(content: new Text("Berhasil di Copy!")));
+                      },
+                    ),
+                    SizedBox(
+                      height: 100.0,
+                    ),
+                    new Container(
+                      margin: EdgeInsets.fromLTRB(0.0, 70.0, 0.0, 0.0),
+                      padding: EdgeInsets.fromLTRB(20.0, 0.0,20.0, 20.0),
+                      decoration: BoxDecoration(
+                          color:Colors.white ,
+                          borderRadius: BorderRadius.circular(10.0),
+                          boxShadow: [
+                            new BoxShadow(
+                              blurRadius: 10.0,
+                              offset: const Offset(3.0, 3.0),
+                              color: Colors.grey,
+                            )
+                          ]
+                      ),
+                      alignment: Alignment.center,
+                      child:Form(
+                        key: formKey,
+                        child: Column(
+                            children: <Widget>[
+                              SizedBox(
+                                height: 20.0,
+                              ),
+                              Text("Lengkapi data di bawah!",
+                                style: TextStyle(fontSize: 17.0,fontWeight: FontWeight.bold),),
+                              SizedBox(
+                                height: 10.0,
+                              ),
+                              Divider(
+                                height: 3.0,
+                                color: Colors.black,
+                              ),
+                              SizedBox(
+                                height: 20.0,
+                              ),
+                              Row(
+
+                                children: <Widget>[
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child:
+                                    CircularGradientButton(
+                                      child: Icon(Icons.camera_alt),
+                                      callback: (){
+                                        _scanQR();
+                                      },
+                                      gradient: Gradients.backToFuture,
+                                      shadowColor: Gradients.rainbowBlue.colors.last.withOpacity(0.5),
+                                    ),
+                                  ),
+
+                                  Column(
+                                    children: <Widget>[
+                                        new Text("Scan Disini"),
+
+                                    ],
+                                  )
+
+
+                                ],
+                              ),
+                              SizedBox(
+                                height: 20.0,
+                              ),
+                              new TextFormField(
+                                initialValue: "",
+                                onSaved: (val) => item.title = val,
+                                validator: (val) => val == "" ? val : null,
+                                decoration: new InputDecoration(
+                                  labelText: "Paste Disini",
+                                  fillColor: Colors.white,
+                                  border: new OutlineInputBorder(
+                                    borderRadius: new BorderRadius.circular(10.0),
+                                    borderSide: new BorderSide(
+                                    ),
+                                  ),
+                                  //fillColor: Colors.green
+                                ),
+                              ),
+                              SizedBox(
+                                height: 20.0,
+                              ),
+                              new TextFormField(
+                                initialValue: "",
+                                onSaved: (val) => item.name = val,
+                                validator: (val) => val == "" ? val : null,
+                                decoration: new InputDecoration(
+                                  labelText: "NIS",
+                                  fillColor: Colors.white,
+                                  border: new OutlineInputBorder(
+                                    borderRadius: new BorderRadius.circular(10.0),
+                                    borderSide: new BorderSide(
+                                    ),
+                                  ),
+                                  //fillColor: Colors.green
+                                ),
+                              ),
+                              SizedBox(
+                                height: 20.0,
+                              ),
+                              new TextFormField(
+                                initialValue: "",
+                                onSaved: (val) => item.rombel = val,
+                                validator: (val) => val == "" ? val : null,
+                                decoration: new InputDecoration(
+                                  labelText: "Rombel",
+                                  fillColor: Colors.white,
+                                  border: new OutlineInputBorder(
+                                    borderRadius: new BorderRadius.circular(10.0),
+                                    borderSide: new BorderSide(
+                                    ),
+                                  ),
+                                  //fillColor: Colors.green
+                                ),
+                              ),
+                              SizedBox(
+                                height: 20.0,
+                              ),
+                              new TextFormField(
+                                initialValue: "",
+                                onSaved: (val) => item.rayon = val,
+                                validator: (val) => val == "" ? val : null,
+                                decoration: new InputDecoration(
+                                  labelText: "Rayon",
+                                  fillColor: Colors.white,
+                                  border: new OutlineInputBorder(
+                                    borderRadius: new BorderRadius.circular(10.0),
+                                    borderSide: new BorderSide(
+                                    ),
+                                  ),
+                                  //fillColor: Colors.green
+                                ),
+                              ),
+                              SizedBox(
+                                height: 20.0,
+                              ),
+                              Center(
+                                  child:Column(
+                                    children: <Widget>[
+                                      CircularGradientButton(
+                                        child: Icon(Icons.send),
+                                        callback: (){
+                                          handleSubmit();
+                                        },
+                                        gradient: Gradients.rainbowBlue,
+                                        shadowColor: Gradients.rainbowBlue.colors.last.withOpacity(0.5),
+                                      ),
+
+                                    ],
+                                  ),
+                              ),
+                            ]),
+                      ),
+                    ),
+                  ],
                 ),
                 SizedBox(
-                  height: 10.0,
-                ),
-                Padding(padding: EdgeInsets.all(5),
-                  child:MaterialButton(
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(5)
-                      ),
-                      height: SizeConfig.safeBlockVertical * 5,
-                      minWidth: SizeConfig.safeBlockHorizontal * 5,
-                      color: Colors.orange,
-                      textColor: Colors.white,
-                      splashColor: Colors.green,
-                      onPressed: _scanQR,
-                      child: const Text('SCAN!')
-                  ),
-                ),
-                SizedBox(
-                  height: 100.0,
+                  height: 70.0,
                 ),
                 Center(
                   child: Text("Lutfi_Ardiansyah",
@@ -233,19 +335,25 @@ class Item {
   String key;
   String title;
   String name;
+  String rombel;
+  String rayon;
 
-  Item(this.title,this.name);
+  Item(this.title,this.name,this.rombel,this.rayon);
 
   Item.fromSnapshot(DataSnapshot snapshot)
       : key = snapshot.key,
         name = snapshot.value["name"],
-        title = snapshot.value["title"];
+        title = snapshot.value["title"],
+        rombel = snapshot.value["rombel"],
+        rayon = snapshot.value["rayon"];
 
 
   toJson() {
     return {
       "title": title,
       "name": name,
+      "rombel":rombel,
+      "rayon":rayon,
     };
   }
 }

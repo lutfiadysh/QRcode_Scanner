@@ -29,6 +29,8 @@ dependencies:
   firebase_database: 1.0.3
   splashscreen:
   rflutter_alert: ^1.0.3
+  gradient_widgets: ^0.5.1
+
 
 
 dev_dependencies:
