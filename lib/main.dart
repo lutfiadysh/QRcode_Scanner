@@ -60,22 +60,6 @@ class _HomeScreenState extends State<HomeScreen> {
   _onEntryAdded(Event event) {
     setState(() {
       items.add(Item.fromSnapshot(event.snapshot));
-      Alert(
-        context: context,
-        title: "Berhasil",
-        desc: "Data berhasil tersimpan.",
-        buttons: [
-          DialogButton(
-            child: Text(
-              "OK",
-              style: TextStyle(color: Colors.white, fontSize: 20),
-            ),
-            onPressed: () => Navigator.pop(context),
-            color: Color.fromRGBO(0, 179, 134, 1.0),
-            radius: BorderRadius.circular(0.0),
-          ),
-        ],
-      ).show();
     });
   }
 
@@ -95,6 +79,22 @@ class _HomeScreenState extends State<HomeScreen> {
       form.save();
       form.reset();
       itemRef.push().set(item.toJson());
+      Alert(
+        context: context,
+        title: "Berhasil",
+        desc: "Data berhasil tersimpan.",
+        buttons: [
+          DialogButton(
+            child: Text(
+              "OK",
+              style: TextStyle(color: Colors.white, fontSize: 20),
+            ),
+            onPressed: () => Navigator.pop(context),
+            color: Color.fromRGBO(0, 179, 134, 1.0),
+            radius: BorderRadius.circular(0.0),
+          ),
+        ],
+      ).show();
     }
   }
 
