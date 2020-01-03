@@ -30,6 +30,8 @@ dependencies:
   splashscreen:
   rflutter_alert: ^1.0.3
   gradient_widgets: ^0.5.1
+  flutter_screenutil: ^0.5.3
+
 
 
 
@@ -49,7 +51,16 @@ flutter:
         - asset: fonts/Roboto-Thin.ttf
     - family: nice
       fonts:
-        - asset: fonts/locare-Brush.ttf
+        - asset: fonts/VarelaRound-Regular.ttf
+    - family: kill
+      fonts:
+        - asset: fonts/ConcertOne-Regular.ttf
+    - family: primary
+      fonts:
+        - asset: fonts/FaunaOne-Regular.ttf
+  assets:
+    - assets/vector_laptop.png
+    - assets/town.png
 
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in

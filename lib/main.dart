@@ -14,21 +14,21 @@ void main() => runApp(new MaterialApp(
   theme: ThemeData(
     primaryColor:Colors.blue,
     accentColor: Colors.blueAccent,
-    fontFamily: 'arial',
+    fontFamily: 'primary',
   ),
   debugShowCheckedModeBanner: false,
   home: new SplashScreen(seconds: 3,navigateAfterSeconds: HomeScreen(),
       title: new Text('SHUN QRcode scanner',
         style: new TextStyle(
-            fontFamily: 'dark',
+            fontFamily: 'nice',
             fontWeight: FontWeight.bold,
             fontSize: 20.0
         ),),
-      backgroundColor: Colors.lightBlue,
+      backgroundColor: Colors.transparent,
       styleTextUnderTheLoader: new TextStyle(),
       photoSize: 100.0,
       onClick: ()=>print("Lutfi Ardianysah"),
-      loaderColor: Colors.red
+      loaderColor: Colors.greenAccent
       ),
     ),
   );
@@ -131,48 +131,29 @@ class _HomeScreenState extends State<HomeScreen> {
     SizeConfig().init(context);
     return Scaffold(
       key:scaffoldKey,
-      appBar: AppBar(
-        centerTitle: true,
-        title: Text('SHUN QRCode Scanner', style: TextStyle(fontFamily: 'dark'),),
-        actions: <Widget>[
-          IconButton(
-            icon:Icon(Icons.info_outline),
-            onPressed: () {
-
-            },
-          ),
-        ],
-      ),
       body: ListView(
-        padding: EdgeInsets.fromLTRB(20.0, 40.0, 20.0, 20.0),
+        padding: EdgeInsets.fromLTRB(30.0, 0.0, 30.0, 0.0),
               children: <Widget>[
                 new Stack(
                   children: <Widget>[
-                    SizedBox(
-                      height: 50.0,
-                    ),
-                    new GestureDetector(
-                      child:Text(result,
-                        style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),
-                      ),
-                      onLongPress: () {
-                        Clipboard.setData(new ClipboardData(text: result));
-                        scaffoldKey.currentState.showSnackBar(
-                            new SnackBar(content: new Text("Berhasil di Copy!")));
-                      },
-                    ),
-                    SizedBox(
-                      height: 100.0,
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: <Widget>[
+                        Padding(
+                          padding: EdgeInsets.only(bottom: 50.0),
+                          child: Image.asset("assets/vector_laptop.png"),
+                        ),
+                      ],
                     ),
                     new Container(
-                      margin: EdgeInsets.fromLTRB(0.0, 70.0, 0.0, 0.0),
-                      padding: EdgeInsets.fromLTRB(20.0, 0.0,20.0, 20.0),
+                      margin: EdgeInsets.fromLTRB(0.0, 200.0, 0.0, 0.0),
+                      padding: EdgeInsets.fromLTRB(20.0, 0.0,20.0, 0.0),
                       decoration: BoxDecoration(
                           color:Colors.white ,
-                          borderRadius: BorderRadius.circular(10.0),
+                          borderRadius: BorderRadius.circular(7.0),
                           boxShadow: [
                             new BoxShadow(
-                              blurRadius: 10.0,
+                              blurRadius: 20.0,
                               offset: const Offset(3.0, 3.0),
                               color: Colors.grey,
                             )
@@ -184,10 +165,18 @@ class _HomeScreenState extends State<HomeScreen> {
                         child: Column(
                             children: <Widget>[
                               SizedBox(
-                                height: 20.0,
+                                height: 30.0,
                               ),
-                              Text("Lengkapi data di bawah!",
-                                style: TextStyle(fontSize: 17.0,fontWeight: FontWeight.bold),),
+                              GestureDetector(
+                                child:Text(result,
+                                  style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),
+                                ),
+                                onLongPress: () {
+                                  Clipboard.setData(new ClipboardData(text: result));
+                                  scaffoldKey.currentState.showSnackBar(
+                                      new SnackBar(content: new Text("Berhasil di Copy!")));
+                                },
+                              ),
                               SizedBox(
                                 height: 10.0,
                               ),
@@ -230,9 +219,14 @@ class _HomeScreenState extends State<HomeScreen> {
                               new TextFormField(
                                 initialValue: "",
                                 onSaved: (val) => item.title = val,
-                                validator: (val) => val == "" ? val : null,
+                                validator: (val) {
+                                  if (val.isEmpty) {
+                                    return 'Mohon Isi dulu';
+                                  }
+                                  return null;
+                                },
                                 decoration: new InputDecoration(
-                                  labelText: "Paste Disini",
+                                  labelText: "Paste hasil scan disini...",
                                   fillColor: Colors.white,
                                   border: new OutlineInputBorder(
                                     borderRadius: new BorderRadius.circular(10.0),
@@ -248,7 +242,12 @@ class _HomeScreenState extends State<HomeScreen> {
                               new TextFormField(
                                 initialValue: "",
                                 onSaved: (val) => item.name = val,
-                                validator: (val) => val == "" ? val : null,
+                                validator: (val) {
+                                  if (val.isEmpty) {
+                                    return 'Mohon Isi dulu';
+                                  }
+                                  return null;
+                                },
                                 decoration: new InputDecoration(
                                   labelText: "NIS",
                                   fillColor: Colors.white,
@@ -266,7 +265,12 @@ class _HomeScreenState extends State<HomeScreen> {
                               new TextFormField(
                                 initialValue: "",
                                 onSaved: (val) => item.rombel = val,
-                                validator: (val) => val == "" ? val : null,
+                                validator: (val) {
+                                  if (val.isEmpty) {
+                                    return 'Mohon Isi dulu';
+                                  }
+                                  return null;
+                                },
                                 decoration: new InputDecoration(
                                   labelText: "Rombel",
                                   fillColor: Colors.white,
@@ -284,7 +288,12 @@ class _HomeScreenState extends State<HomeScreen> {
                               new TextFormField(
                                 initialValue: "",
                                 onSaved: (val) => item.rayon = val,
-                                validator: (val) => val == "" ? val : null,
+                                validator: (val) {
+                                  if (val.isEmpty) {
+                                    return 'Mohon Isi dulu';
+                                  }
+                                  return null;
+                                },
                                 decoration: new InputDecoration(
                                   labelText: "Rayon",
                                   fillColor: Colors.white,
@@ -297,34 +306,37 @@ class _HomeScreenState extends State<HomeScreen> {
                                 ),
                               ),
                               SizedBox(
-                                height: 20.0,
-                              ),
-                              Center(
-                                  child:Column(
-                                    children: <Widget>[
-                                      CircularGradientButton(
-                                        child: Icon(Icons.send),
-                                        callback: (){
-                                          handleSubmit();
-                                        },
-                                        gradient: Gradients.rainbowBlue,
-                                        shadowColor: Gradients.rainbowBlue.colors.last.withOpacity(0.5),
-                                      ),
-
-                                    ],
-                                  ),
+                                height: 40.0,
                               ),
                             ]),
+                      ),
+                    ),
+                    Center(
+                      child:Container(
+                        alignment: Alignment.bottomLeft,
+                        margin: EdgeInsets.only(top: 690.0),
+                        child: CircularGradientButton(
+                          child: Icon(Icons.send),
+                          callback: (){
+                            handleSubmit();
+                          },
+                          gradient: Gradients.rainbowBlue,
+                          shadowColor: Gradients.rainbowBlue.colors.last.withOpacity(1.0),
+                        ),
+
                       ),
                     ),
                   ],
                 ),
                 SizedBox(
-                  height: 70.0,
+                  height: 40.0,
                 ),
                 Center(
                   child: Text("Lutfi_Ardiansyah",
-                    style: TextStyle(fontSize: 20,fontFamily: 'dark'),),
+                    style: TextStyle(fontSize: 15,fontFamily: 'nice'),),
+                ),
+                SizedBox(
+                  height: 10.0,
                 ),
               ],
       ),
